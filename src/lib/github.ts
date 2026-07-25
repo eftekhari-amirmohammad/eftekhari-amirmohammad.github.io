@@ -117,8 +117,14 @@ export async function getProjects(): Promise<Project[]> {
 		const user = githubUsername.toLowerCase()
 		const visible = repos
 			.filter((r) => !r.fork && !r.archived)
-			// Hide the special profile-readme repo and the .github repo.
-			.filter((r) => r.name.toLowerCase() !== user && r.name.toLowerCase() !== ".github")
+			// Hide the profile-readme repo, the .github repo, and the portfolio
+			// website repo itself (e.g. username.github.io).
+			.filter(
+				(r) =>
+					r.name.toLowerCase() !== user &&
+					r.name.toLowerCase() !== ".github" &&
+					!r.name.toLowerCase().endsWith(".github.io"),
+			)
 			.sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
 
 		if (visible.length === 0) return fallbackProjects
