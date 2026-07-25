@@ -1,0 +1,15 @@
+---
+// Canvas particle network for the hero (spec 05 §5, decision: canvas).
+// Rendered only on desktop/tablet; disabled on mobile + reduced-motion.
+---
+
+<canvas
+	id="particle-network"
+	class="pointer-events-none absolute inset-0 h-full w-full opacity-70"
+	aria-hidden="true"
+></canvas>
+
+<script>
+	import { initParticleNetwork } from "../../lib/particles.ts"
+	initParticleNetwork("particle-network")
+</script>

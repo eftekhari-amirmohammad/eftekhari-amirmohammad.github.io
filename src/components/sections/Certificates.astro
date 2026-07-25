@@ -1,0 +1,56 @@
+---
+import SectionTitle from "@components/ui/SectionTitle.astro"
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+import { certificates } from "@data/certificates"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<section id="certificates" class="section relative">
+	<div class="container-page flex flex-col gap-12">
+		<SectionTitle kicker={t("certs.kicker")} title={t("certs.title")} />
+
+		{
+			certificates.length > 0 ? (
+				<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{certificates.map((c, i) => (
+						<article class="reveal card flex flex-col gap-3" data-reveal-delay={i * 70}>
+							{c.image ? (
+								<img
+									src={c.image}
+									alt={c.title}
+									loading="lazy"
+									decoding="async"
+									class="aspect-[4/3] w-full rounded-xl border border-hairline object-cover"
+								/>
+							) : (
+								<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/12 text-accent">
+									<Icon name="target" size={20} />
+								</span>
+							)}
+							<div>
+								<h3 class="font-semibold">{c.title}</h3>
+								<p class="text-sm text-ink-muted">
+									{c.issuer}
+									{c.year ? ` \u00b7 ${c.year}` : ""}
+								</p>
+							</div>
+							{c.description && (
+								<p class="text-sm leading-relaxed text-ink-secondary">{c.description[lang]}</p>
+							)}
+						</article>
+					))}
+				</div>
+			) : (
+				<div class="reveal card flex flex-col items-center gap-4 py-14 text-center">
+					<span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/12 text-accent">
+						<Icon name="target" size={26} />
+					</span>
+					<p class="max-w-md text-ink-secondary">{t("certs.empty")}</p>
+				</div>
+			)
+		}
+	</div>
+</section>

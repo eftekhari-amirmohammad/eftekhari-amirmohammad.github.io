@@ -1,0 +1,25 @@
+---
+import { getLangFromUrl, alternateLangPath } from "@i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+const enPath = alternateLangPath(Astro.url, "en")
+const dePath = alternateLangPath(Astro.url, "de")
+
+const linkClass = (active: boolean) =>
+	`px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 ${
+		active ? "text-ink" : "text-ink-muted hover:text-ink-secondary"
+	}`
+---
+
+<div
+	class="inline-flex items-center rounded-xl border border-hairline bg-white/[0.02] p-0.5"
+	role="group"
+	aria-label="Language"
+>
+	<a href={enPath} class={linkClass(lang === "en")} aria-current={lang === "en" ? "true" : undefined}>
+		EN
+	</a>
+	<a href={dePath} class={linkClass(lang === "de")} aria-current={lang === "de" ? "true" : undefined}>
+		DE
+	</a>
+</div>

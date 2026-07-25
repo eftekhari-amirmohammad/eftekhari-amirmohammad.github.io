@@ -1,0 +1,37 @@
+---
+import { getLangFromUrl } from "@i18n/utils"
+import { site } from "@data/site"
+
+const lang = getLangFromUrl(Astro.url)
+const isDe = lang === "de"
+---
+
+<section class="section relative pt-8">
+	<div class="container-page max-w-3xl">
+		<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Impressum</h1>
+		<div class="mt-8 flex flex-col gap-6 leading-relaxed text-ink-secondary">
+			<div>
+				<h2 class="font-semibold text-ink">
+					{isDe ? "Angaben gem\u00e4\u00df \u00a7 5 DDG" : "Information pursuant to \u00a7 5 DDG"}
+				</h2>
+				<p class="mt-2">
+					{site.fullName}<br />
+					76178 Kerman<br />
+					Iran
+				</p>
+			</div>
+			<div>
+				<h2 class="font-semibold text-ink">{isDe ? "Kontakt" : "Contact"}</h2>
+				<p class="mt-2">
+					{isDe ? "E-Mail" : "Email"}: <a class="text-accent hover:underline" href={`mailto:${site.email}`}>{site.email}</a>
+				</p>
+			</div>
+			<div>
+				<h2 class="font-semibold text-ink">
+					{isDe ? "Verantwortlich f\u00fcr den Inhalt" : "Responsible for the content"}
+				</h2>
+				<p class="mt-2">{site.fullName}</p>
+			</div>
+		</div>
+	</div>
+</section>

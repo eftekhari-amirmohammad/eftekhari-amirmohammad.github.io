@@ -1,0 +1,56 @@
+---
+import Icon from "./Icon.astro"
+import type { IconName } from "@lib/icons"
+
+interface Props {
+	href: string
+	variant?: "primary" | "secondary" | "ghost"
+	icon?: IconName
+	iconRight?: IconName
+	external?: boolean
+	class?: string
+	"aria-label"?: string
+}
+
+const {
+	href,
+	variant = "primary",
+	icon,
+	iconRight,
+	external = false,
+	class: className = "",
+	"aria-label": ariaLabel,
+} = Astro.props
+
+const base =
+	"group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-300 ease-premium focus-visible:outline-none"
+
+const variants = {
+	primary:
+		"bg-accent text-white hover:bg-accent-hover hover:-translate-y-0.5 hover:shadow-[0_8px_30px_-8px_rgba(59,130,246,0.5)]",
+	secondary:
+		"border border-hairline bg-white/[0.02] text-ink hover:border-accent/40 hover:bg-white/[0.05] hover:-translate-y-0.5",
+	ghost: "text-ink-secondary hover:text-ink",
+}
+
+const rel = external ? "noopener noreferrer" : undefined
+const target = external ? "_blank" : undefined
+---
+
+<a
+	href={href}
+	class={`${base} ${variants[variant]} ${className}`}
+	rel={rel}
+	target={target}
+	aria-label={ariaLabel}
+>
+	{icon && <Icon name={icon} size={18} />}
+	<slot />
+	{iconRight && (
+		<Icon
+			name={iconRight}
+			size={18}
+			class="transition-transform duration-300 ease-premium group-hover:translate-x-0.5"
+		/>
+	)}
+</a>

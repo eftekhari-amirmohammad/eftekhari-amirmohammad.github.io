@@ -1,0 +1,181 @@
+---
+import Button from "@components/ui/Button.astro"
+import Icon from "@components/ui/Icon.astro"
+import ParticleNetwork from "@components/effects/ParticleNetwork.astro"
+import { getLangFromUrl, useTranslations, localizePath } from "@i18n/utils"
+import { site, socials } from "@data/site"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const base = localizePath("/", lang)
+const prefix = base === "/" ? "" : base
+---
+
+<section
+	id="home"
+	class="relative flex min-h-[92vh] items-center overflow-hidden pt-24"
+>
+	<!-- Layered background: grid + particles + radial glow -->
+	<div class="absolute inset-0 grid-bg" aria-hidden="true"></div>
+	<ParticleNetwork />
+	<div
+		class="pointer-events-none absolute -top-40 left-1/2 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]"
+		aria-hidden="true"
+	></div>
+
+	<div class="container-page relative z-10">
+		<div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+			<!-- Text column -->
+			<div class="flex flex-col items-start gap-6">
+				<span
+					class="animate-fade-up inline-flex items-center gap-2 rounded-full border border-hairline bg-white/[0.03] px-4 py-1.5 text-sm text-ink-secondary"
+				>
+					<span class="relative flex h-2 w-2">
+						<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span>
+						<span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+					</span>
+					{t("hero.eyebrow")}
+				</span>
+
+				<h1
+					class="animate-fade-up text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
+					style="animation-delay:80ms"
+				>
+					<span class="text-gradient">{site.name}</span>
+				</h1>
+
+				<p
+					class="animate-fade-up max-w-xl text-lg leading-relaxed text-ink-secondary"
+					style="animation-delay:160ms"
+				>
+					{t("hero.lead")}
+				</p>
+
+				<div
+					class="animate-fade-up flex flex-wrap items-center gap-3"
+					style="animation-delay:240ms"
+				>
+					<Button href={`${prefix}#projects`} variant="primary" iconRight="arrow-right">
+						{t("hero.cta.projects")}
+					</Button>
+					<Button href={`${prefix}#contact`} variant="secondary">
+						{t("hero.cta.contact")}
+					</Button>
+				</div>
+
+				<div
+					class="animate-fade-up flex items-center gap-2 pt-2"
+					style="animation-delay:320ms"
+				>
+					<a
+						href={socials.github.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink"
+						aria-label={socials.github.label}
+					>
+						<Icon name="github" size={18} />
+					</a>
+					<a
+						href={socials.linkedin.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink"
+						aria-label={socials.linkedin.label}
+					>
+						<Icon name="linkedin" size={18} />
+					</a>
+					<a
+						href={socials.xing.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink"
+						aria-label={socials.xing.label}
+					>
+						<Icon name="xing" size={18} />
+					</a>
+				</div>
+			</div>
+
+			<!-- Photo column: frameless (transparent PNG friendly) + scroll fade -->
+			<div class="animate-fade-in relative mx-auto w-full max-w-sm lg:max-w-none" style="animation-delay:200ms">
+				<div id="hero-photo" class="relative will-change-transform">
+					<!-- Soft circular glow behind the cut-out -->
+					<div
+						class="pointer-events-none absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[90px]"
+						aria-hidden="true"
+					></div>
+					<picture>
+						<source
+							type="image/avif"
+							srcset="/images/profile/amir-400.avif 400w, /images/profile/amir-600.avif 600w, /images/profile/amir-900.avif 900w"
+							sizes="(max-width: 1024px) 384px, 460px"
+					/>
+						<source
+							type="image/webp"
+							srcset="/images/profile/amir-400.webp 400w, /images/profile/amir-600.webp 600w, /images/profile/amir-900.webp 900w"
+							sizes="(max-width: 1024px) 384px, 460px"
+					/>
+						<img
+							src="/images/profile/amir-600.webp"
+							width="600"
+							height="948"
+							alt="Portrait of Amirmohammad Eftekhari"
+							fetchpriority="high"
+							decoding="async"
+							class="relative mx-auto h-auto w-full max-w-[440px] object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+						/>
+					</picture>
+
+					<!-- Floating technical badge -->
+					<div
+						class="absolute -bottom-2 left-0 hidden items-center gap-2 rounded-2xl border border-hairline bg-bg-800/90 px-4 py-3 backdrop-blur-md sm:flex"
+					>
+						<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/15 text-accent">
+							<Icon name="terminal" size={16} />
+						</span>
+						<div class="flex flex-col">
+							<span class="font-mono text-xs text-ink">Linux · Networking</span>
+							<span class="text-xs text-ink-muted">System Integration</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scroll hint -->
+	<a
+		href={`${prefix}#about`}
+		class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-ink-muted transition-colors hover:text-ink-secondary md:block"
+		aria-label={t("nav.about")}
+	>
+		<Icon name="chevron-down" size={22} class="animate-bounce" />
+	</a>
+</section>
+
+<script>
+	// Beautiful scroll-driven fade for the hero portrait.
+	// Fades out, drifts down, slightly shrinks and blurs as you scroll.
+	const photo = document.getElementById("hero-photo")
+	const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+	if (photo && !reduce) {
+		let ticking = false
+		const update = () => {
+			const vh = window.innerHeight || 1
+			const p = Math.min(window.scrollY / (vh * 0.7), 1)
+			photo.style.opacity = String(1 - p)
+			photo.style.transform = `translateY(${p * 70}px) scale(${1 - p * 0.08})`
+			photo.style.filter = `blur(${p * 4}px)`
+			ticking = false
+		}
+		const onScroll = () => {
+			if (!ticking) {
+				window.requestAnimationFrame(update)
+				ticking = true
+			}
+		}
+		window.addEventListener("scroll", onScroll, { passive: true })
+		update()
+	}
+</script>

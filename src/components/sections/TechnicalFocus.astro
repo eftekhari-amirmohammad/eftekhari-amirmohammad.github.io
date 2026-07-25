@@ -1,0 +1,42 @@
+---
+import SectionTitle from "@components/ui/SectionTitle.astro"
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+import { technicalFocus } from "@data/technicalFocus"
+import type { IconName } from "@lib/icons"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<section id="focus" class="section relative">
+	<div class="container-page flex flex-col gap-12">
+		<SectionTitle kicker={t("focus.kicker")} title={t("focus.title")} />
+
+		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				technicalFocus.map((area, i) => (
+					<article
+						class="reveal card card-hover flex flex-col gap-4"
+						data-reveal-delay={i * 80}
+					>
+						<span class="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/12 text-accent">
+							<Icon name={area.icon as IconName} size={22} />
+						</span>
+						<div class="flex flex-col gap-2">
+							<h3 class="text-lg font-semibold">{area.title[lang]}</h3>
+							<p class="text-sm leading-relaxed text-ink-secondary">
+								{area.description[lang]}
+							</p>
+						</div>
+						<div class="mt-auto flex flex-wrap gap-1.5 pt-2">
+							{area.items.map((item) => (
+								<span class="tag">{item}</span>
+							))}
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>

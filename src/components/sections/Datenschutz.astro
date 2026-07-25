@@ -1,0 +1,45 @@
+---
+import { getLangFromUrl } from "@i18n/utils"
+import { site } from "@data/site"
+
+const lang = getLangFromUrl(Astro.url)
+const isDe = lang === "de"
+---
+
+<section class="section relative pt-8">
+	<div class="container-page max-w-3xl">
+		<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+			{isDe ? "Datenschutzerkl\u00e4rung" : "Privacy Policy"}
+		</h1>
+		<div class="mt-8 flex flex-col gap-6 leading-relaxed text-ink-secondary">
+			<p>
+				{isDe
+					? "Diese Website ist eine statische Portfolio-Seite. Es werden keine Cookies gesetzt und keine Tracking- oder Analyse-Werkzeuge verwendet."
+					: "This website is a static portfolio. It sets no cookies and uses no tracking or analytics tools."}
+			</p>
+			<div>
+				<h2 class="font-semibold text-ink">Hosting</h2>
+				<p class="mt-2">
+					{isDe
+						? "Die Seite wird über GitHub Pages (GitHub Inc.) gehostet. Der Anbieter kann technische Zugriffsdaten (z. B. IP-Adresse, Zeitpunkt) in Server-Logs verarbeiten, um den Betrieb sicherzustellen."
+						: "The site is hosted on GitHub Pages (GitHub Inc.). The provider may process technical access data (e.g. IP address, timestamp) in server logs to ensure operation."}
+				</p>
+			</div>
+			<div>
+				<h2 class="font-semibold text-ink">{isDe ? "Externe Inhalte" : "External content"}</h2>
+				<p class="mt-2">
+					{isDe
+						? "Projektdaten werden \u00f6ffentlich \u00fcber die GitHub-API abgerufen. Beim Klick auf externe Links (GitHub, LinkedIn, Xing) gelten die Datenschutzbestimmungen der jeweiligen Anbieter."
+						: "Project data is fetched publicly via the GitHub API. When you click external links (GitHub, LinkedIn, Xing), the privacy policies of those providers apply."}
+				</p>
+			</div>
+			<div>
+				<h2 class="font-semibold text-ink">{isDe ? "Kontakt" : "Contact"}</h2>
+				<p class="mt-2">
+					{isDe ? "Bei Fragen zum Datenschutz: " : "For privacy questions: "}
+					<a class="text-accent hover:underline" href={`mailto:${site.email}`}>{site.email}</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>

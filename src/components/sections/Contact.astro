@@ -1,0 +1,49 @@
+---
+import SectionTitle from "@components/ui/SectionTitle.astro"
+import Button from "@components/ui/Button.astro"
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+import { site, socials } from "@data/site"
+
+const t = useTranslations(getLangFromUrl(Astro.url))
+const channels = [socials.github, socials.linkedin, socials.email] as const
+---
+
+<section id="contact" class="section relative">
+	<div class="container-page">
+		<div class="relative overflow-hidden rounded-3xl border border-hairline bg-surface-100/60 px-6 py-16 text-center md:px-12">
+			<div class="absolute inset-0 grid-bg opacity-60" aria-hidden="true"></div>
+			<div
+				class="pointer-events-none absolute left-1/2 top-0 h-64 w-[600px] -translate-x-1/2 rounded-full bg-accent/12 blur-[100px]"
+				aria-hidden="true"
+			></div>
+
+			<div class="relative mx-auto flex max-w-2xl flex-col items-center gap-6">
+				<SectionTitle kicker={t("contact.kicker")} title={t("contact.title")} align="center" />
+				<p class="reveal max-w-lg text-lg text-ink-secondary">{t("contact.desc")}</p>
+
+				<div class="reveal flex flex-wrap items-center justify-center gap-3 pt-2">
+					<Button href={socials.email.url} variant="primary" icon="mail">
+						{t("contact.email")}
+					</Button>
+					<Button href={socials.linkedin.url} variant="secondary" icon="linkedin" external>
+						LinkedIn
+					</Button>
+					<Button href={socials.xing.url} variant="secondary" icon="xing" external>
+						Xing
+					</Button>
+					<Button href={socials.github.url} variant="secondary" icon="github" external>
+						GitHub
+					</Button>
+				</div>
+
+				<a
+					href={socials.email.url}
+					class="reveal mt-2 font-mono text-sm text-ink-muted transition-colors hover:text-accent"
+				>
+					{site.email}
+				</a>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,40 @@
+---
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+
+const t = useTranslations(getLangFromUrl(Astro.url))
+---
+
+<button
+	id="theme-toggle"
+	type="button"
+	class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-colors duration-300 hover:border-accent/40 hover:text-ink"
+	aria-label={t("theme.toggle")}
+>
+	<span class="sun-icon hidden"><Icon name="sun" size={18} /></span>
+	<span class="moon-icon"><Icon name="moon" size={18} /></span>
+</button>
+
+<script>
+	const btn = document.getElementById("theme-toggle")
+	const root = document.documentElement
+	const sun = btn?.querySelector<HTMLElement>(".sun-icon")
+	const moon = btn?.querySelector<HTMLElement>(".moon-icon")
+
+	function sync() {
+		const isLight = root.getAttribute("data-theme") === "light"
+		if (sun) sun.classList.toggle("hidden", !isLight)
+		if (moon) moon.classList.toggle("hidden", isLight)
+	}
+
+	btn?.addEventListener("click", () => {
+		const next = root.getAttribute("data-theme") === "light" ? "dark" : "light"
+		root.setAttribute("data-theme", next)
+		try {
+			localStorage.setItem("theme", next)
+		} catch (e) {}
+		sync()
+	})
+
+	sync()
+</script>

@@ -1,0 +1,43 @@
+---
+import SectionTitle from "@components/ui/SectionTitle.astro"
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+import { skillGroups } from "@data/skills"
+import type { IconName } from "@lib/icons"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<section id="skills" class="section relative bg-bg-800/40">
+	<div class="container-page flex flex-col gap-12">
+		<SectionTitle kicker={t("skills.kicker")} title={t("skills.title")} />
+
+		<div class="grid gap-4 sm:grid-cols-2">
+			{
+				skillGroups.map((group, i) => (
+					<article class="reveal card flex flex-col gap-4" data-reveal-delay={i * 80}>
+						<div class="flex items-center gap-3">
+							<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/12 text-accent">
+								<Icon name={group.icon as IconName} size={20} />
+							</span>
+							<h3 class="text-base font-semibold">{group.category[lang]}</h3>
+						</div>
+						<div class="flex flex-wrap gap-2">
+							{group.skills.map((skill) => {
+								const name = typeof skill === "string" ? skill : skill.name
+								const note = typeof skill === "string" ? undefined : skill.note
+								return (
+									<span class="tag text-sm">
+										{name}
+										{note && <span class="ml-1.5 text-ink-muted">{note}</span>}
+									</span>
+								)
+							})}
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>

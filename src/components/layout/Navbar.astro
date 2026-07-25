@@ -1,0 +1,128 @@
+---
+import Icon from "@components/ui/Icon.astro"
+import LangSwitcher from "./LangSwitcher.astro"
+import { getLangFromUrl, useTranslations, localizePath } from "@i18n/utils"
+import { site } from "@data/site"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const base = localizePath("/", lang)
+
+const links = [
+	{ href: `${base === "/" ? "" : base}#about`, label: t("nav.about") },
+	{ href: `${base === "/" ? "" : base}#skills`, label: t("nav.skills") },
+	{ href: `${base === "/" ? "" : base}#projects`, label: t("nav.projects") },
+	{ href: `${base === "/" ? "" : base}#journey`, label: t("nav.journey") },
+	{ href: `${base === "/" ? "" : base}#contact`, label: t("nav.contact") },
+]
+---
+
+<header
+	id="navbar"
+	class="fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-premium"
+	data-scrolled="false"
+>
+	<nav class="container-page flex h-16 items-center justify-between md:h-20" aria-label="Main">
+		<a
+			href={base}
+			class="flex items-center gap-2 text-base font-semibold tracking-tight"
+			aria-label={site.name}
+		>
+			<span
+				class="flex h-8 w-8 items-center justify-center rounded-lg border border-hairline bg-white/[0.03] font-mono text-sm text-accent"
+			>
+				{site.initials}
+			</span>
+		</a>
+
+		<div class="hidden items-center gap-1 md:flex">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						class="group relative px-3 py-2 text-sm text-ink-secondary transition-colors duration-200 hover:text-ink"
+					>
+						{link.label}
+						<span class="absolute inset-x-3 -bottom-px h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-premium group-hover:scale-x-100" />
+					</a>
+				))
+			}
+		</div>
+
+		<div class="flex items-center gap-2">
+			<div class="hidden sm:block"><LangSwitcher /></div>
+			<button
+				id="menu-toggle"
+				type="button"
+				class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-colors hover:text-ink md:hidden"
+				aria-label={t("nav.menu")}
+				aria-expanded="false"
+				aria-controls="mobile-menu"
+			>
+				<span class="menu-open"><Icon name="menu" size={20} /></span>
+				<span class="menu-close hidden"><Icon name="x" size={20} /></span>
+			</button>
+		</div>
+	</nav>
+
+	<!-- Mobile menu -->
+	<div
+		id="mobile-menu"
+		class="grid grid-rows-[0fr] overflow-hidden border-hairline bg-bg-800/95 backdrop-blur-lg transition-[grid-template-rows] duration-300 ease-premium md:hidden"
+	>
+		<div class="min-h-0">
+			<div class="container-page flex flex-col gap-1 border-t border-hairline py-4">
+				{
+					links.map((link) => (
+						<a
+							href={link.href}
+							class="mobile-link rounded-lg px-3 py-3 text-base text-ink-secondary transition-colors hover:bg-white/[0.04] hover:text-ink"
+						>
+							{link.label}
+						</a>
+					))
+				}
+				<div class="mt-2 px-3"><LangSwitcher /></div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<script>
+	const navbar = document.getElementById("navbar")
+	const menuToggle = document.getElementById("menu-toggle")
+	const mobileMenu = document.getElementById("mobile-menu")
+	const openIcon = menuToggle?.querySelector<HTMLElement>(".menu-open")
+	const closeIcon = menuToggle?.querySelector<HTMLElement>(".menu-close")
+
+	// Sticky background on scroll
+	const onScroll = () => {
+		if (!navbar) return
+		const scrolled = window.scrollY > 24
+		navbar.dataset.scrolled = String(scrolled)
+		navbar.classList.toggle("nav-scrolled", scrolled)
+	}
+	onScroll()
+	window.addEventListener("scroll", onScroll, { passive: true })
+
+	// Mobile menu
+	let open = false
+	const setMenu = (next: boolean) => {
+		open = next
+		if (!mobileMenu) return
+		mobileMenu.style.gridTemplateRows = open ? "1fr" : "0fr"
+		menuToggle?.setAttribute("aria-expanded", String(open))
+		openIcon?.classList.toggle("hidden", open)
+		closeIcon?.classList.toggle("hidden", !open)
+	}
+	menuToggle?.addEventListener("click", () => setMenu(!open))
+	mobileMenu?.querySelectorAll(".mobile-link").forEach((a) =>
+		a.addEventListener("click", () => setMenu(false)),
+	)
+</script>
+
+<style>
+	#navbar.nav-scrolled {
+		@apply border-b border-hairline bg-bg-900/80 backdrop-blur-lg;
+	}
+</style>

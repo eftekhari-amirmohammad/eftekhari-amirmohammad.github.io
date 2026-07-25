@@ -1,0 +1,61 @@
+---
+import SectionTitle from "@components/ui/SectionTitle.astro"
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+import { getJourney } from "@lib/journey"
+import type { IconName } from "@lib/icons"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const items = await getJourney()
+---
+
+<section id="journey" class="section relative bg-bg-800/40">
+	<div class="container-page flex flex-col gap-12">
+		<SectionTitle kicker={t("journey.kicker")} title={t("journey.title")} />
+
+		<ol class="relative flex flex-col gap-2">
+			{/* vertical line */}
+			<span
+				class="absolute left-[19px] top-2 bottom-2 w-px bg-gradient-to-b from-accent/60 via-hairline to-transparent"
+				aria-hidden="true"
+			></span>
+
+			{
+				items.map((item, i) => (
+					<li
+						class="reveal relative flex gap-5 pb-8 last:pb-0"
+						data-reveal-delay={i * 70}
+					>
+						<span
+							class={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border bg-bg-800 ${
+								item.status === "current"
+									? "border-emerald-500/40 text-emerald-400"
+									: "border-hairline text-accent"
+							}`}
+						>
+							<Icon name={item.icon as IconName} size={18} />
+						</span>
+						<div class="flex flex-col gap-1 pt-1.5">
+							<div class="flex flex-wrap items-center gap-2">
+								<h3 class="text-lg font-semibold">{item.title[lang]}</h3>
+								{item.status === "current" && (
+									<span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400">
+										<span class="relative flex h-1.5 w-1.5">
+											<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+											<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+										</span>
+										{t("journey.current")}
+									</span>
+								)}
+							</div>
+							<p class="text-sm leading-relaxed text-ink-secondary">
+								{item.description[lang]}
+							</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>

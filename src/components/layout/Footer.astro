@@ -1,0 +1,53 @@
+---
+import Icon from "@components/ui/Icon.astro"
+import { getLangFromUrl, useTranslations, localizePath } from "@i18n/utils"
+import { site, socials } from "@data/site"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const year = new Date().getFullYear()
+const links = [socials.github, socials.linkedin, socials.xing, socials.email] as const
+const legal = [
+	{ href: localizePath("/impressum", lang), label: t("footer.impressum") },
+	{ href: localizePath("/datenschutz", lang), label: t("footer.privacy") },
+]
+---
+
+<footer class="border-t border-hairline">
+	<div class="container-page flex flex-col items-center justify-between gap-6 py-10 sm:flex-row">
+		<div class="flex flex-col items-center gap-1 sm:items-start">
+			<span class="font-semibold">{site.name}</span>
+			<span class="text-sm text-ink-muted">
+				&copy; {year} {site.name}. {t("footer.rights")}
+			</span>
+		</div>
+
+		<div class="flex items-center gap-2">
+			{
+				links.map((l) => (
+					<a
+						href={l.url}
+						class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-hairline text-ink-secondary transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink"
+						aria-label={l.label}
+						rel={l.icon === "mail" ? undefined : "noopener noreferrer"}
+						target={l.icon === "mail" ? undefined : "_blank"}
+					>
+						<Icon name={l.icon} size={18} />
+					</a>
+				))
+			}
+		</div>
+	</div>
+	<div class="container-page flex flex-col items-center justify-between gap-3 pb-8 text-xs text-ink-muted sm:flex-row">
+		<span>{t("footer.built")}</span>
+		<nav class="flex items-center gap-4" aria-label="Legal">
+			{
+				legal.map((l) => (
+					<a href={l.href} class="transition-colors hover:text-ink-secondary">
+						{l.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</footer>
