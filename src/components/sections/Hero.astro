@@ -24,7 +24,7 @@ const prefix = base === "/" ? "" : base
 	></div>
 
 	<div class="container-page relative z-10">
-		<div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+		<div class="grid items-center gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
 			<!-- Text column -->
 			<div class="flex flex-col items-start gap-6">
 				<span
@@ -123,7 +123,7 @@ const prefix = base === "/" ? "" : base
 							alt="Portrait of Amirmohammad Eftekhari"
 							fetchpriority="high"
 							decoding="async"
-							class="relative mx-auto h-auto w-full max-w-[440px] object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+							class="relative mx-auto h-auto w-full max-w-[260px] object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] sm:max-w-[340px] lg:max-w-[440px]"
 						/>
 					</picture>
 
@@ -159,15 +159,27 @@ const prefix = base === "/" ? "" : base
 	// Fades out, drifts down, slightly shrinks and blurs as you scroll.
 	const photo = document.getElementById("hero-photo")
 	const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+	const desktop = window.matchMedia("(min-width: 1024px)")
 	if (photo && !reduce) {
 		let ticking = false
+		const reset = () => {
+			photo.style.opacity = ""
+			photo.style.transform = ""
+			photo.style.filter = ""
+		}
 		const update = () => {
+			ticking = false
+			// Only run the scroll fade on large screens. On phones/tablets the
+			// portrait sits below the text, so fading it while scrolling hides it.
+			if (!desktop.matches) {
+				reset()
+				return
+			}
 			const vh = window.innerHeight || 1
 			const p = Math.min(window.scrollY / (vh * 0.7), 1)
 			photo.style.opacity = String(1 - p)
 			photo.style.transform = `translateY(${p * 70}px) scale(${1 - p * 0.08})`
 			photo.style.filter = `blur(${p * 4}px)`
-			ticking = false
 		}
 		const onScroll = () => {
 			if (!ticking) {
@@ -176,6 +188,7 @@ const prefix = base === "/" ? "" : base
 			}
 		}
 		window.addEventListener("scroll", onScroll, { passive: true })
+		desktop.addEventListener("change", update)
 		update()
 	}
 </script>
