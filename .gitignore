@@ -28,3 +28,4 @@ pnpm-debug.log*
 
 # personal notes (kept local, not published)
 PROJECT-GUIDE.md
+*.zip
